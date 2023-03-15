@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "468522176434",
+    "project_id": "health-d6118",
+    "storage_bucket": "health-d6118.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468522176434:android:a0b597a6606b84037d1eab",
+        "android_client_info": {
+          "package_name": "com.example.health"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "468522176434-m1un9rvp55q5qga62shd3dukpsti61gq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDo61AcQjthdBJB2HKew7ehbteE30paCLw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "468522176434-m1un9rvp55q5qga62shd3dukpsti61gq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
