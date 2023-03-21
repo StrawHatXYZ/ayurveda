@@ -10,9 +10,10 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   final _formKey = GlobalKey<FormState>();
-  late String _email, _password;
+  late String _email, _password, _confirmPassword;
 
   bool _isLoading = false;
+  bool obscureText = true;
 
   Future<void> _submit() async {
     if (_formKey.currentState!.validate()) {
@@ -56,15 +57,33 @@ class _SignupPageState extends State<SignupPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 const Text(
-                  'Create an account',
+                  'Welcome !',
                   style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
+                ),
+                const Text(
+                  'Create an account to get started.',
+                  style: TextStyle(fontSize: 16.0, color: Colors.black54),
                 ),
                 const SizedBox(height: 32.0),
                 TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Email address',
-                    // hintText: 'Enter your email address',
-                    // border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.email_outlined,
+                      size: 15.0,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+
+                    // fillColor: Colors.white,
+                    filled: true,
+                    hintText: "Email address",
+                    hintStyle: TextStyle(
+                      color: Colors.grey[400],
+                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 20.0),
+                    border: border(context),
+                    enabledBorder: border(context),
+                    focusedBorder: focusBorder(context),
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -78,12 +97,38 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 const SizedBox(height: 16.0),
                 TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    // hintText: 'Enter your password',
-                    // border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.lock_outline,
+                      size: 15.0,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        setState(() => obscureText = !obscureText);
+                      },
+                      child: Icon(
+                        obscureText
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        size: 15.0,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+
+                    // fillColor: Colors.white,
+                    filled: true,
+                    hintText: "Password",
+                    hintStyle: TextStyle(
+                      color: Colors.grey[400],
+                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 20.0),
+                    border: border(context),
+                    enabledBorder: border(context),
+                    focusedBorder: focusBorder(context),
                   ),
-                  obscureText: true,
+                  obscureText: obscureText,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your password';
@@ -94,24 +139,116 @@ class _SignupPageState extends State<SignupPage> {
                     _password = value!;
                   },
                 ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.lock_outline,
+                      size: 15.0,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+
+                    // fillColor: Colors.white,
+                    filled: true,
+                    hintText: " Confirm Password",
+                    hintStyle: TextStyle(
+                      color: Colors.grey[400],
+                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 20.0),
+                    border: border(context),
+                    enabledBorder: border(context),
+                    focusedBorder: focusBorder(context),
+                  ),
+                  obscureText: true,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please confirm your password';
+                    }
+
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _confirmPassword = value!;
+                  },
+                ),
                 const SizedBox(height: 32.0),
                 _isLoading
                     ? const CircularProgressIndicator()
-                    : ElevatedButton(
-                        onPressed: _submit,
-                        child: const Text('Create account'),
+                    : SizedBox(
+                        width: double.infinity,
+                        height: 45.0,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(40.0),
+                              ),
+                            ),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                          onPressed: _submit,
+                          child: Text(
+                            'SIGN UP'.toUpperCase(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
                       ),
                 const SizedBox(height: 20.0),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/login');
-                  },
-                  child: const Text('Already have an account? Log in.'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Already have an account ?'),
+                    const SizedBox(width: 5.0),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/login');
+                      },
+                      child: Text(
+                        'Log in',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  border(BuildContext context) {
+    return OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(30.0),
+      ),
+      borderSide: BorderSide(
+        color: Colors.grey[400]!,
+        width: 0.0,
+      ),
+    );
+  }
+
+  focusBorder(BuildContext context) {
+    return OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(30.0),
+      ),
+      borderSide: BorderSide(
+        color: Theme.of(context).colorScheme.secondary,
+        width: 1.0,
       ),
     );
   }

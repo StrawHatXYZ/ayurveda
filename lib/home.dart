@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,25 +15,47 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  var selectedPageIndex = 0;
+  int _page = 0;
 
   //Pages widget
-  final List<Widget> _pages = [
-    HomeFeed(),
-    MessagesScreen(),
-    const Center(
-      child: Text('Page 3'),
-    ),
-    const Center(
-      child: Text('Page 4'),
-    ),
+  List pages = [
+    {
+      'title': 'Home',
+      'icon': Icons.home_outlined,
+      'page': HomeFeed(),
+      'index': 0,
+    },
+    {
+      'title': 'Messages',
+      'icon': Icons.search_outlined,
+      'page': MessagesScreen(),
+      'index': 1,
+    },
+    {
+      'title': 'unsee',
+      'icon': Icons.visibility_off_outlined,
+      'page': Text('nes'),
+      'index': 2,
+    },
+    {
+      'title': 'Notification',
+      'icon': Icons.notifications_outlined,
+      'page': const Text('notification'),
+      'index': 3,
+    },
+    {
+      'title': 'Profile',
+      'icon': Icons.person_outlined,
+      'page': UserProfileScreen(),
+      'index': 4,
+    },
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       //white appbar with searchbar menu and profile
-      appBar: selectedPageIndex == 0
+      appBar: _page == 0
           ? AppBar(
               systemOverlayStyle: const SystemUiOverlayStyle(
                 statusBarColor: Colors.white,
@@ -43,10 +66,10 @@ class _HomeState extends State<Home> {
               actions: [
                 Container(
                   width: Constants(context).width * 0.75,
-                  height: Constants(context).height * 0.058,
+                  height: Constants(context).height * 0.05,
                   decoration: BoxDecoration(
                     color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(30),
                   ),
                   child: Row(
                     children: [
@@ -128,53 +151,71 @@ class _HomeState extends State<Home> {
       ),
       //open drawer
 
-      body: Column(
-        children: [
-          Expanded(
-            child: _pages[selectedPageIndex],
-          ),
-        ],
+      body: PageTransitionSwitcher(
+        transitionBuilder: (
+          Widget child,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+        ) {
+          return SharedAxisTransition(
+            transitionType: SharedAxisTransitionType.horizontal,
+            animation: animation,
+            secondaryAnimation: secondaryAnimation,
+            child: child,
+          );
+        },
+        child: pages[_page]['page'],
       ),
-      bottomNavigationBar: bottomNavigation(context),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(width: 5),
+            for (Map item in pages)
+              item['index'] == 2
+                  ? buildFab()
+                  : Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: IconButton(
+                        icon: Icon(
+                          item['icon'],
+                          color: item['index'] != _page
+                              ? Theme.of(context).brightness == Brightness.dark
+                                  ? Colors.white
+                                  : Colors.black
+                              : Theme.of(context).colorScheme.secondary,
+                          size: 25.0,
+                        ),
+                        onPressed: () => navigationTapped(item['index']),
+                      ),
+                    ),
+            SizedBox(width: 5),
+          ],
+        ),
       ),
     );
   }
 
-  NavigationBar bottomNavigation(BuildContext context) {
-    return NavigationBar(
-      selectedIndex: selectedPageIndex,
-      height: Constants(context).height * 0.08,
-      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-      onDestinationSelected: (int index) {
-        setState(() {
-          selectedPageIndex = index;
-        });
-      },
-      destinations: const <NavigationDestination>[
-        NavigationDestination(
-          selectedIcon: Icon(Icons.home),
-          icon: Icon(Icons.home_outlined),
-          label: 'Home',
-        ),
-        NavigationDestination(
-          selectedIcon: Icon(Icons.chat_bubble),
-          icon: Icon(Icons.chat_bubble_outline),
-          label: 'Messages',
-        ),
-        NavigationDestination(
-          selectedIcon: Icon(Icons.favorite),
-          icon: Icon(Icons.favorite_border),
-          label: 'Protocols',
-        ),
-        NavigationDestination(
-          selectedIcon: Icon(Icons.shopping_cart),
-          icon: Icon(Icons.shopping_cart_outlined),
-          label: 'Shopping',
-        ),
-      ],
-    );
+  buildFab() {
+    return SizedBox(
+        height: 45.0,
+        width: 45.0,
+        // ignore: missing_required_param
+        child: FloatingActionButton(
+          backgroundColor: Colors.white,
+          child: Icon(
+            Icons.add_outlined,
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+          onPressed: () {},
+        ));
+  }
+
+  void navigationTapped(int page) {
+    setState(() {
+      _page = page;
+    });
   }
 }

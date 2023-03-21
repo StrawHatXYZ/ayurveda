@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:health/screens/fogotpassword.dart';
+import 'package:health/screens/forgotpassword.dart';
 import 'package:health/home.dart';
 import 'package:health/screens/signup.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'screens/login.dart';
 
 void main() async {
@@ -25,10 +25,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.cyan, backgroundColor: Colors.white),
-        primaryColor: Colors.cyan,
-      ),
+          colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.cyan, backgroundColor: Colors.white),
+          primaryColor: Colors.cyan,
+          textTheme: GoogleFonts.nunitoTextTheme()),
       initialRoute: '/',
       routes: {
         '/': (context) {

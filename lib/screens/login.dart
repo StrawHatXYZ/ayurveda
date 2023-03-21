@@ -15,103 +15,250 @@ class _LoginPageState extends State<LoginPage> {
   String _password = '';
   String _errorMessage = '';
 
+  bool obscureText = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Login Page'),
-      // ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              const Center(
-                child: Text(
-                  'Login',
-                  style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
+          children: [
+            SizedBox(height: MediaQuery.of(context).size.height / 5),
+            SizedBox(
+              height: 170.0,
+              width: MediaQuery.of(context).size.width,
+              child: Image.asset(
+                'assets/images/login.png',
+              ),
+            ),
+            const SizedBox(height: 10.0),
+            const Center(
+              child: Text(
+                'Welcome back!',
+                style: TextStyle(
+                  fontSize: 23.0,
+                  fontWeight: FontWeight.w900,
                 ),
               ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Email',
+            ),
+            Center(
+              child: Text(
+                'Log into your account and get started!',
+                style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w300,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  setState(() {
-                    _email = value.trim();
-                  });
-                },
               ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  return null;
-                },
-                obscureText: true,
-                onChanged: (value) {
-                  setState(() {
-                    _password = value.trim();
-                  });
-                },
-              ),
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    try {
-                      await _auth.signInWithEmailAndPassword(
-                        email: _email,
-                        password: _password,
-                      );
-                      Navigator.pushReplacementNamed(context, '/home');
-                    } on FirebaseAuthException catch (e) {
+            ),
+            Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.email_outlined,
+                        size: 15.0,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+
+                      // fillColor: Colors.white,
+                      filled: true,
+                      hintText: "Email",
+                      hintStyle: TextStyle(
+                        color: Colors.grey[400],
+                      ),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 20.0),
+                      border: border(context),
+                      enabledBorder: border(context),
+                      focusedBorder: focusBorder(context),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
                       setState(() {
-                        _errorMessage = e.message!;
+                        _email = value.trim();
                       });
-                    }
-                  }
-                },
-                child: const Text('Login'),
+                    },
+                  ),
+                  const SizedBox(height: 15.0),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.lock_outline,
+                        size: 15.0,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() => obscureText = !obscureText);
+                        },
+                        child: Icon(
+                          obscureText
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          size: 15.0,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+
+                      // fillColor: Colors.white,
+                      filled: true,
+                      hintText: "Password",
+                      hintStyle: TextStyle(
+                        color: Colors.grey[400],
+                      ),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 20.0),
+                      border: border(context),
+                      enabledBorder: border(context),
+                      focusedBorder: focusBorder(context),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                    obscureText: obscureText,
+                    onChanged: (value) {
+                      setState(() {
+                        _password = value.trim();
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 8.0),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: InkWell(
+                        onTap: () =>
+                            {Navigator.pushNamed(context, '/forgot-password')},
+                        child: const SizedBox(
+                          width: 130,
+                          height: 40,
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              'Forgot Password?',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  SizedBox(
+                    height: 45.0,
+                    width: 60.0,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40.0),
+                          ),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                      // highlightElevation: 4.0,
+                      child: Text(
+                        'Log in'.toUpperCase(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          try {
+                            await _auth.signInWithEmailAndPassword(
+                              email: _email,
+                              password: _password,
+                            );
+                            Navigator.pushReplacementNamed(context, '/home');
+                          } on FirebaseAuthException catch (e) {
+                            setState(() {
+                              _errorMessage = e.message!;
+                            });
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  if (_errorMessage.isNotEmpty)
+                    Text(
+                      _errorMessage,
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                ],
               ),
-              if (_errorMessage.isNotEmpty)
-                Text(
-                  _errorMessage,
-                  style: const TextStyle(
-                    color: Colors.red,
-                    fontSize: 16.0,
+            ),
+            const SizedBox(height: 10.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Don\'t have an account?'),
+                const SizedBox(width: 5.0),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/signup');
+                  },
+                  child: Text(
+                    'Sign Up',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                 ),
-              const SizedBox(height: 16.0),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/signup');
-                },
-                child: const Text('Don\'t have an account? Sign up'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/forgot-password');
-                },
-                child: const Text('Forgot Password?'),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          ]),
+    );
+  }
+
+  border(BuildContext context) {
+    return OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(30.0),
+      ),
+      borderSide: BorderSide(
+        color: Colors.grey[400]!,
+        width: 0.0,
+      ),
+    );
+  }
+
+  focusBorder(BuildContext context) {
+    return OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(30.0),
+      ),
+      borderSide: BorderSide(
+        color: Theme.of(context).colorScheme.secondary,
+        width: 1.0,
       ),
     );
   }
