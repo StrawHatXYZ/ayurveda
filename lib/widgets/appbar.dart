@@ -25,26 +25,34 @@ class _AppbarState extends State<Appbar> {
             Scaffold.of(context).openDrawer();
           },
         ),
-        Container(
-          width: Constants(context).width * 0.7,
-          height: Constants(context).height * 0.06,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade200,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Center(
-            child: TextField(
-              onTapOutside: (event) {
-                node.unfocus();
-              },
-              focusNode: node,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Search for something',
-                prefixIcon: Icon(Icons.search),
+        Row(
+          children: [
+            Container(
+              width: Constants(context).width * 0.7,
+              height: Constants(context).height * 0.06,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                children: [
+                  Center(
+                    child: TextField(
+                      onTapOutside: (event) {
+                        node.unfocus();
+                      },
+                      focusNode: node,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Search for something',
+                        prefixIcon: Icon(Icons.search),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
+          ],
         ),
         IconButton(
           icon: Icon(Icons.account_circle_rounded,

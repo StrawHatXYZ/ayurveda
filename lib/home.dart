@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:health/widgets/appbar.dart';
+import 'package:flutter/services.dart';
 import 'package:health/constants.dart';
+import 'package:health/screens/homefeed.dart';
+import 'package:health/screens/messages.dart';
+import 'package:health/screens/profile.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -13,18 +16,76 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var selectedPageIndex = 0;
 
-  List<String> pages = ["Home", "Chat", "Favorite", "Cart"];
+  //Pages widget
+  final List<Widget> _pages = [
+    HomeFeed(),
+    MessagesScreen(),
+    const Center(
+      child: Text('Page 3'),
+    ),
+    const Center(
+      child: Text('Page 4'),
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //white appbar with searchbar menu and profile
+      appBar: selectedPageIndex == 0
+          ? AppBar(
+              systemOverlayStyle: const SystemUiOverlayStyle(
+                statusBarColor: Colors.white,
+                statusBarIconBrightness: Brightness.dark,
+              ),
+              backgroundColor: Colors.white,
+              elevation: 0,
+              actions: [
+                Container(
+                  width: Constants(context).width * 0.75,
+                  height: Constants(context).height * 0.058,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.search),
+                        color: Colors.black,
+                        onPressed: () {},
+                      ),
+                      const Center(
+                        child: Text(
+                          'Search for something',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.person),
+                  color: Colors.black,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UserProfileScreen()),
+                    );
+                  },
+                ),
+              ],
+            )
+          : null,
       drawer: Drawer(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
             const DrawerHeader(
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 121, 42, 134),
+                color: Colors.cyan,
               ),
               child: Text(
                 'Drawer ',
@@ -35,7 +96,7 @@ class _HomeState extends State<Home> {
               ),
             ),
             const ListTile(
-              iconColor: Colors.white,
+              iconColor: Colors.black,
               textColor: Colors.black,
               leading: Icon(Icons.message),
               title: Text('Messages'),
@@ -69,16 +130,8 @@ class _HomeState extends State<Home> {
 
       body: Column(
         children: [
-          selectedPageIndex == 0
-              ? Appbar(
-                  context: context,
-                )
-              : const Text(""),
           Expanded(
-            child: Center(
-              child: Text(pages[selectedPageIndex],
-                  style: const TextStyle(fontSize: 32)),
-            ),
+            child: _pages[selectedPageIndex],
           ),
         ],
       ),
@@ -94,7 +147,7 @@ class _HomeState extends State<Home> {
     return NavigationBar(
       selectedIndex: selectedPageIndex,
       height: Constants(context).height * 0.08,
-      labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       onDestinationSelected: (int index) {
         setState(() {
           selectedPageIndex = index;
@@ -109,17 +162,17 @@ class _HomeState extends State<Home> {
         NavigationDestination(
           selectedIcon: Icon(Icons.chat_bubble),
           icon: Icon(Icons.chat_bubble_outline),
-          label: 'chat',
+          label: 'Messages',
         ),
         NavigationDestination(
           selectedIcon: Icon(Icons.favorite),
           icon: Icon(Icons.favorite_border),
-          label: 'favorite',
+          label: 'Protocols',
         ),
         NavigationDestination(
           selectedIcon: Icon(Icons.shopping_cart),
           icon: Icon(Icons.shopping_cart_outlined),
-          label: 'favorite',
+          label: 'Shopping',
         ),
       ],
     );
