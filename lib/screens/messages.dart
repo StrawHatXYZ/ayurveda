@@ -25,8 +25,14 @@ class MessagesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Messages'),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: const Text(
+          "Messages",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        ),
       ),
       body: ListView.builder(
         itemCount: messages.length,
