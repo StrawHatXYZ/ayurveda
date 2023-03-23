@@ -16,10 +16,12 @@ class UsersPage extends StatefulWidget {
 class _UsersPageState extends State<UsersPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           systemOverlayStyle: SystemUiOverlayStyle.light,
           backgroundColor: Colors.white,
           title: const Text('Users'),
+          elevation: 0,
         ),
         body: StreamBuilder<List<types.User>>(
           stream: FirebaseChatCore.instance.users(),
@@ -43,20 +45,41 @@ class _UsersPageState extends State<UsersPage> {
                   onTap: () {
                     _handlePressed(user, context);
                   },
+                  behavior: HitTestBehavior.opaque,
                   child: Container(
+                    //onhover change color
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.grey,
+                          width: 0.4,
+                        ),
+                      ),
+                    ),
                     margin: EdgeInsets.only(
-                      top: index == 0 ? 16 : 0,
                       bottom: index == snapshot.data!.length - 1 ? 16 : 0,
                     ),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
-                      vertical: 8,
+                      vertical: 14,
                     ),
                     child: Row(
                       children: [
                         _buildAvatar(user),
-                        Text(getUserName(user),
-                            style: const TextStyle(fontSize: 18)),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(getUserName(user),
+                                style: const TextStyle(
+                                    fontSize: 18, color: Colors.black87)),
+                            Text(
+                              getUserEmail(user),
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.grey),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -68,22 +91,19 @@ class _UsersPageState extends State<UsersPage> {
       );
 
   Widget _buildAvatar(types.User user) {
-    final color = getUserAvatarNameColor(user);
-    final hasImage = user.imageUrl != null;
+    final color = const Color.fromARGB(255, 194, 243, 255);
     final name = getUserName(user);
 
     return Container(
       margin: const EdgeInsets.only(right: 16),
       child: CircleAvatar(
-        backgroundColor: hasImage ? Colors.transparent : color,
-        backgroundImage: hasImage ? NetworkImage(user.imageUrl!) : null,
+        backgroundColor: color,
+        backgroundImage: null,
         radius: 20,
-        child: !hasImage
-            ? Text(
-                name.isEmpty ? '' : name[0].toUpperCase(),
-                style: const TextStyle(color: Colors.white),
-              )
-            : null,
+        child: Text(
+          name.isEmpty ? '' : name[0].toUpperCase() + name[1].toUpperCase(),
+          style: const TextStyle(color: Colors.cyan),
+        ),
       ),
     );
   }
