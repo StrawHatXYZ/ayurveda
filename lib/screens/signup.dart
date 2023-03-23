@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import '../auth/auth.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -24,8 +27,17 @@ class _SignupPageState extends State<SignupPage> {
       _formKey.currentState!.save();
 
       try {
-        await FirebaseAuthService.signUpWithEmailAndPassword(
-            email: _email, password: _password);
+        final UserCredential userCredential =
+            await FirebaseAuthService.signUpWithEmailAndPassword(
+                email: _email, password: _password);
+        const FirebaseChatCoreConfig('contacts', 'rooms', 'users');
+        await FirebaseChatCore.instance.createUserInFirestore(
+          types.User(
+            firstName: _email.split('@')[0],
+            id: userCredential.user!.uid,
+            imageUrl: 'https://ui-avatars.com/api/?name=$_email',
+          ),
+        );
 
         setState(() {
           _isLoading = false;

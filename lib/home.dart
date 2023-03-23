@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:health/constants.dart';
+import 'package:health/screens/chatmessages.dart';
 import 'package:health/screens/homefeed.dart';
-import 'package:health/screens/messages.dart';
 import 'package:health/screens/profile.dart';
 import 'package:health/screens/shopping.dart';
 
@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
     {
       'title': 'Messages',
       'icon': Icons.messenger_outline,
-      'page': MessagesScreen(),
+      'page': const RoomsPage(),
       'index': 1,
     },
     {
@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
     {
       'title': 'Shopping',
       'icon': Icons.shopping_cart_outlined,
-      'page': const ShoppingScreen(),
+      'page': ShoppingScreen(),
       'index': 4,
     },
   ];
@@ -95,7 +95,7 @@ class _HomeState extends State<Home> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => UserProfileScreen()),
+                          builder: (context) => const UserProfileScreen()),
                     );
                   },
                 ),
