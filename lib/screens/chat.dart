@@ -34,10 +34,11 @@ class _ChatPageState extends State<ChatPage> {
           title: Row(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(widget.room.imageUrl as String),
+                backgroundImage: NetworkImage(widget.room.users[1].imageUrl ??
+                    'https://ui-avatars.com/api/?name=unkow'),
               ),
               const SizedBox(width: 8),
-              Text(widget.room.name as String),
+              Text(widget.room.users[1].firstName ?? ''),
             ],
           ),
         ),

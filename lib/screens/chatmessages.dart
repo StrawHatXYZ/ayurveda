@@ -28,7 +28,10 @@ class _RoomsPageState extends State<RoomsPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        // systemOverlayStyle: SystemUiOverlayStyle.light,
+        backgroundColor: Colors.white,
         title: const Text('Chats'),
+        automaticallyImplyLeading: false,
       ),
       body: _user == null
           ? Container(
@@ -73,12 +76,22 @@ class _RoomsPageState extends State<RoomsPage> {
                         );
                       },
                       child: Container(
+                        margin: EdgeInsets.only(
+                          top: index == 0 ? 10 : 0,
+                          bottom: index == snapshot.data!.length - 1 ? 10 : 0,
+                        ),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
-                          vertical: 8,
+                          vertical: 10,
                         ),
                         child: Row(
-                          children: [_buildAvatar(room), Text(room.name ?? '')],
+                          children: [
+                            _buildAvatar(room),
+                            Text(
+                              room.name ?? '',
+                              style: const TextStyle(fontSize: 21),
+                            )
+                          ],
                         ),
                       ),
                     );

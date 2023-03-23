@@ -18,6 +18,7 @@ class _UsersPageState extends State<UsersPage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           systemOverlayStyle: SystemUiOverlayStyle.light,
+          backgroundColor: Colors.white,
           title: const Text('Users'),
         ),
         body: StreamBuilder<List<types.User>>(
@@ -43,6 +44,10 @@ class _UsersPageState extends State<UsersPage> {
                     _handlePressed(user, context);
                   },
                   child: Container(
+                    margin: EdgeInsets.only(
+                      top: index == 0 ? 16 : 0,
+                      bottom: index == snapshot.data!.length - 1 ? 16 : 0,
+                    ),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 8,
@@ -50,7 +55,8 @@ class _UsersPageState extends State<UsersPage> {
                     child: Row(
                       children: [
                         _buildAvatar(user),
-                        Text(getUserName(user)),
+                        Text(getUserName(user),
+                            style: const TextStyle(fontSize: 18)),
                       ],
                     ),
                   ),
@@ -86,7 +92,8 @@ class _UsersPageState extends State<UsersPage> {
     final navigator = Navigator.of(context);
     final room = await FirebaseChatCore.instance.createRoom(otherUser);
 
-    navigator.pop();
+    // navigator.pop();
+
     await navigator.push(
       MaterialPageRoute(
         builder: (context) => ChatPage(
