@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -65,6 +67,18 @@ class _RoomsPageState extends State<RoomsPage> {
                     child: const Text('No Chats'),
                   );
                 }
+                //List rooms based on updated time check if null
+                if (snapshot.data != null) {
+                  snapshot.data!.sort((a, b) {
+                    if (a.updatedAt == null) {
+                      return 1;
+                    }
+                    if (b.updatedAt == null) {
+                      return -1;
+                    }
+                    return b.updatedAt!.compareTo(a.updatedAt!);
+                  });
+                }
 
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
@@ -116,8 +130,9 @@ class _RoomsPageState extends State<RoomsPage> {
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black87),
                                 ),
-                                Text("Last message",
-                                    style: const TextStyle(
+                                //Last message
+                                const Text("Last message",
+                                    style: TextStyle(
                                         fontSize: 14, color: Colors.black54)),
                               ],
                             ),
@@ -126,33 +141,14 @@ class _RoomsPageState extends State<RoomsPage> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  //convert timestamp to time
-                                  convertTimestampToTime(room.updatedAt!),
+                                  //check update time is not null ad convert timestamp to time function
+                                  room.updatedAt != null
+                                      ? convertTimestampToTime(room.updatedAt!)
+                                      : '',
                                   style: const TextStyle(
                                       fontSize: 14, color: Colors.black54),
                                 ),
-                                //randomly assign unread messages
-                                (room.updatedAt! % 2) == 0
-                                    ? Container(
-                                        margin: const EdgeInsets.only(top: 4),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 4,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.cyan,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        child: Text(
-                                          "1",
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      )
-                                    : Container(),
+                                //if unread messages, show number
                               ],
                             ),
                           ],
@@ -254,7 +250,7 @@ class _RoomsPageState extends State<RoomsPage> {
             ),
           ),
           //randomly assign active status
-          (room.updatedAt! % 2) == 0
+          (Random().nextInt(100) % 2 == 0)
               ? Positioned(
                   bottom: 0,
                   right: 0,
