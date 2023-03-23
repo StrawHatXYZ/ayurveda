@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:health/constants.dart';
 import 'package:health/screens/chatmessages.dart';
 import 'package:health/screens/homefeed.dart';
-import 'package:health/screens/messages.dart';
 import 'package:health/screens/profile.dart';
 
 class Home extends StatefulWidget {
@@ -28,7 +27,7 @@ class _HomeState extends State<Home> {
     },
     {
       'title': 'Messages',
-      'icon': Icons.search_outlined,
+      'icon': Icons.messenger_outline,
       'page': const RoomsPage(),
       'index': 1,
     },
@@ -39,14 +38,14 @@ class _HomeState extends State<Home> {
       'index': 2,
     },
     {
-      'title': 'Notification',
-      'icon': Icons.notifications_outlined,
-      'page': const Center(child: Text('notification')),
+      'title': 'Protocols',
+      'icon': Icons.book_outlined,
+      'page': const Text('Protocols'),
       'index': 3,
     },
     {
-      'title': 'Profile',
-      'icon': Icons.person_outlined,
+      'title': 'Shopping',
+      'icon': Icons.shopping_cart_outlined,
       'page': const UserProfileScreen(),
       'index': 4,
     },
@@ -168,6 +167,8 @@ class _HomeState extends State<Home> {
         child: pages[_page]['page'],
       ),
       bottomNavigationBar: BottomAppBar(
+        height: 60,
+        elevation: 0,
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
