@@ -28,9 +28,15 @@ class _RoomsPageState extends State<RoomsPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        elevation: 0,
         // systemOverlayStyle: SystemUiOverlayStyle.light,
         backgroundColor: Colors.white,
-        title: const Text('Chats'),
+        title: const Text('Chats',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            )),
         automaticallyImplyLeading: false,
       ),
       body: _user == null

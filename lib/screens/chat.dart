@@ -31,6 +31,7 @@ class _ChatPageState extends State<ChatPage> {
         appBar: AppBar(
           // systemOverlayStyle: SystemUiOverlayStyle.light,
           backgroundColor: Colors.white,
+          elevation: 0,
           title: Row(
             children: [
               CircleAvatar(

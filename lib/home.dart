@@ -33,22 +33,16 @@ class _HomeState extends State<Home> {
       'index': 1,
     },
     {
-      'title': 'unsee',
-      'icon': Icons.visibility_off_outlined,
-      'page': const Text('nes'),
-      'index': 2,
-    },
-    {
       'title': 'Protocols',
       'icon': Icons.book_outlined,
       'page': const Text('Protocols'),
-      'index': 3,
+      'index': 2,
     },
     {
       'title': 'Shopping',
       'icon': Icons.shopping_cart_outlined,
       'page': ShoppingScreen(),
-      'index': 4,
+      'index': 3,
     },
   ];
 
@@ -56,7 +50,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       //white appbar with searchbar menu and profile
-      appBar: _page == 0 || _page == 4
+      appBar: _page == 0 || _page == 3
           ? AppBar(
               systemOverlayStyle: const SystemUiOverlayStyle(
                 statusBarColor: Colors.white,
@@ -167,6 +161,13 @@ class _HomeState extends State<Home> {
         },
         child: pages[_page]['page'],
       ),
+      floatingActionButton: _page == 0
+          ? FloatingActionButton(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              child: const Icon(Icons.add_outlined, color: Colors.white),
+              onPressed: () {},
+            )
+          : null,
       bottomNavigationBar: BottomAppBar(
         height: 60,
         elevation: 0,
@@ -177,23 +178,21 @@ class _HomeState extends State<Home> {
           children: [
             const SizedBox(width: 5),
             for (Map item in pages)
-              item['index'] == 2
-                  ? buildFab()
-                  : Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: IconButton(
-                        icon: Icon(
-                          item['icon'],
-                          color: item['index'] != _page
-                              ? Theme.of(context).brightness == Brightness.dark
-                                  ? Colors.white
-                                  : Colors.black
-                              : Theme.of(context).colorScheme.secondary,
-                          size: 25.0,
-                        ),
-                        onPressed: () => navigationTapped(item['index']),
-                      ),
-                    ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: IconButton(
+                  icon: Icon(
+                    item['icon'],
+                    color: item['index'] != _page
+                        ? Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black
+                        : Theme.of(context).colorScheme.secondary,
+                    size: 25.0,
+                  ),
+                  onPressed: () => navigationTapped(item['index']),
+                ),
+              ),
             const SizedBox(width: 5),
           ],
         ),
