@@ -6,6 +6,7 @@ import 'package:health/constants.dart';
 import 'package:health/screens/homefeed.dart';
 import 'package:health/screens/messages.dart';
 import 'package:health/screens/profile.dart';
+import 'package:health/screens/shopping.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -46,7 +47,7 @@ class _HomeState extends State<Home> {
     {
       'title': 'Shopping',
       'icon': Icons.shopping_cart_outlined,
-      'page': UserProfileScreen(),
+      'page': const ShoppingScreen(),
       'index': 4,
     },
   ];
@@ -55,7 +56,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       //white appbar with searchbar menu and profile
-      appBar: _page == 0
+      appBar: _page == 0 || _page == 4
           ? AppBar(
               systemOverlayStyle: const SystemUiOverlayStyle(
                 statusBarColor: Colors.white,
