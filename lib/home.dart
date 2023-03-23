@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:health/constants.dart';
+import 'package:health/screens/chatmessages.dart';
 import 'package:health/screens/homefeed.dart';
 import 'package:health/screens/messages.dart';
 import 'package:health/screens/profile.dart';
@@ -28,25 +29,25 @@ class _HomeState extends State<Home> {
     {
       'title': 'Messages',
       'icon': Icons.search_outlined,
-      'page': MessagesScreen(),
+      'page': const RoomsPage(),
       'index': 1,
     },
     {
       'title': 'unsee',
       'icon': Icons.visibility_off_outlined,
-      'page': Text('nes'),
+      'page': const Text('nes'),
       'index': 2,
     },
     {
       'title': 'Notification',
       'icon': Icons.notifications_outlined,
-      'page': const Text('notification'),
+      'page': const Center(child: Text('notification')),
       'index': 3,
     },
     {
       'title': 'Profile',
       'icon': Icons.person_outlined,
-      'page': UserProfileScreen(),
+      'page': const UserProfileScreen(),
       'index': 4,
     },
   ];
@@ -94,7 +95,7 @@ class _HomeState extends State<Home> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => UserProfileScreen()),
+                          builder: (context) => const UserProfileScreen()),
                     );
                   },
                 ),
@@ -191,7 +192,7 @@ class _HomeState extends State<Home> {
                         onPressed: () => navigationTapped(item['index']),
                       ),
                     ),
-            SizedBox(width: 5),
+            const SizedBox(width: 5),
           ],
         ),
       ),

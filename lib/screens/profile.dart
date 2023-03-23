@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:health/constants.dart';
 
 class UserProfileScreen extends StatelessWidget {
+  const UserProfileScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,7 +14,7 @@ class UserProfileScreen extends StatelessWidget {
       body: Column(
         children: <Widget>[
           Container(
-            height: 200.0,
+            height: Constants(context).height * 0.25,
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -47,7 +50,7 @@ class UserProfileScreen extends StatelessWidget {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(Constants(context).height * 0.01),
               child: Column(
                 children: <Widget>[
                   const ListTile(
