@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:firebase_auth/firebase_auth.dart';
 
 const colors = [
   Color(0xffff6767),
@@ -19,6 +20,13 @@ Color getUserAvatarNameColor(types.User user) {
   return colors[index];
 }
 
+//capitalize first letter of name
 String getUserName(types.User user) {
-  return user.firstName!;
+  return user.firstName!.substring(0, 1).toUpperCase() +
+      user.firstName!.substring(1);
+}
+
+//Import email from firebase auth
+String getUserEmail(types.User user) {
+  return FirebaseAuth.instance.currentUser!.email!;
 }

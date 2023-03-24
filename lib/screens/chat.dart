@@ -44,11 +44,29 @@ class _ChatPageState extends State<ChatPage> {
           title: Row(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(
-                    user.imageUrl ?? 'https://ui-avatars.com/api/?name=unkow'),
+                backgroundColor: const Color.fromARGB(255, 194, 243, 255),
+                child: Text(
+                  widget.room.users[1].firstName!.substring(0, 2).toUpperCase(),
+                  style: const TextStyle(
+                    color: Colors.cyan,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
+
               const SizedBox(width: 8),
-              Text(user.firstName ?? ''),
+              //User name of the  selected user
+              Text(
+                //Capitalizing the first letter of the name
+                widget.room.users[1].firstName!.substring(0, 1).toUpperCase() +
+                    widget.room.users[1].firstName!.substring(1),
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
         ),
@@ -78,38 +96,53 @@ class _ChatPageState extends State<ChatPage> {
       context: context,
       builder: (BuildContext context) => SafeArea(
         child: SizedBox(
-          height: 144,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _handleImageSelection();
-                },
-                child: const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text('Photo'),
+          height: 160,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _handleImageSelection();
+                  },
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Photo',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                        )),
+                  ),
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _handleFileSelection();
-                },
-                child: const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text('File'),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _handleFileSelection();
+                  },
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('File',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                        )),
+                  ),
                 ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text('Cancel'),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Cancel',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                        )),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

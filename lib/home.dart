@@ -6,6 +6,7 @@ import 'package:health/constants.dart';
 import 'package:health/screens/chatmessages.dart';
 import 'package:health/screens/homefeed.dart';
 import 'package:health/screens/profile.dart';
+import 'package:health/screens/protocols.dart';
 import 'package:health/screens/shopping.dart';
 
 class Home extends StatefulWidget {
@@ -35,7 +36,7 @@ class _HomeState extends State<Home> {
     {
       'title': 'Protocols',
       'icon': Icons.book_outlined,
-      'page': const Text('Protocols'),
+      'page': const Protocols(),
       'index': 2,
     },
     {

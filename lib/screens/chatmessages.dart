@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -65,6 +67,18 @@ class _RoomsPageState extends State<RoomsPage> {
                     child: const Text('No Chats'),
                   );
                 }
+                //List rooms based on updated time check if null
+                if (snapshot.data != null) {
+                  snapshot.data!.sort((a, b) {
+                    if (a.updatedAt == null) {
+                      return 1;
+                    }
+                    if (b.updatedAt == null) {
+                      return -1;
+                    }
+                    return b.updatedAt!.compareTo(a.updatedAt!);
+                  });
+                }
 
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
@@ -88,15 +102,55 @@ class _RoomsPageState extends State<RoomsPage> {
                         ),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
-                          vertical: 10,
+                          vertical: 14,
                         ),
+                        //onhover change color
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.black38,
+                              width: 0.2,
+                            ),
+                          ),
+                        ),
+                        //Row with avatar, name, last message and time
                         child: Row(
                           children: [
                             _buildAvatar(room),
-                            Text(
-                              room.name ?? '',
-                              style: const TextStyle(fontSize: 21),
-                            )
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  //Capitalise first letter of name
+                                  room.name!.substring(0, 1).toUpperCase() +
+                                      room.name!.substring(1),
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black87),
+                                ),
+                                //Last message
+                                const Text("Last message",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.black54)),
+                              ],
+                            ),
+                            const Spacer(),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  //check update time is not null ad convert timestamp to time function
+                                  room.updatedAt != null
+                                      ? convertTimestampToTime(room.updatedAt!)
+                                      : '',
+                                  style: const TextStyle(
+                                      fontSize: 14, color: Colors.black54),
+                                ),
+                                //if unread messages, show number
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -117,13 +171,46 @@ class _RoomsPageState extends State<RoomsPage> {
                   ),
                 );
               },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
 
+//convert timestamp to time function
+  String convertTimestampToTime(int timestamp) {
+    var date = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    var now = DateTime.now();
+    var difference = now.difference(date);
+    var time = '';
+
+    if (difference.inDays > 7) {
+      time = '${date.day}/${date.month}/${date.year}';
+    } else if (difference.inDays > 1) {
+      time = '${difference.inDays} days ago';
+    } else if (difference.inDays == 1) {
+      time = 'Yesterday';
+    } else if (difference.inHours > 1) {
+      time = '${difference.inHours} hours ago';
+    } else if (difference.inHours == 1) {
+      time = '1 hour ago';
+    } else if (difference.inMinutes > 1) {
+      time = '${difference.inMinutes} minutes ago';
+    } else if (difference.inMinutes == 1) {
+      time = '1 minute ago';
+    } else if (difference.inSeconds > 1) {
+      time = '${difference.inSeconds} seconds ago';
+    } else if (difference.inSeconds == 1) {
+      time = '1 second ago';
+    } else {
+      time = 'Just now';
+    }
+
+    return time;
+  }
+
+//avatar with active status`
   Widget _buildAvatar(types.Room room) {
-    var color = Colors.transparent;
+    var color = Color.fromARGB(171, 194, 243, 255);
 
     if (room.type == types.RoomType.direct) {
       try {
@@ -131,7 +218,7 @@ class _RoomsPageState extends State<RoomsPage> {
           (u) => u.id != _user!.uid,
         );
 
-        color = getUserAvatarNameColor(otherUser);
+        color = color;
       } catch (e) {
         // Do nothing if other user is not found.
       }
@@ -142,16 +229,46 @@ class _RoomsPageState extends State<RoomsPage> {
 
     return Container(
       margin: const EdgeInsets.only(right: 16),
-      child: CircleAvatar(
-        backgroundColor: hasImage ? Colors.transparent : color,
-        backgroundImage: hasImage ? NetworkImage(room.imageUrl!) : null,
-        radius: 20,
-        child: !hasImage
-            ? Text(
-                name.isEmpty ? '' : name[0].toUpperCase(),
-                style: const TextStyle(color: Colors.white),
-              )
-            : null,
+      child: Stack(
+        children: [
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(25),
+            ),
+            child: Center(
+              child: Text(
+                name.substring(0, 2).toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.cyan,
+                ),
+              ),
+            ),
+          ),
+          //randomly assign active status
+          (Random().nextInt(100) % 2 == 0)
+              ? Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                    width: 15,
+                    height: 15,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(7.5),
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                )
+              : Container(),
+        ],
       ),
     );
   }
