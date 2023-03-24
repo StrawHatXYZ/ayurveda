@@ -47,6 +47,8 @@ dependencies:
   mime: ^1.0.4
   open_filex: ^4.3.2
   flutter_svg: ^2.0.4
+  timeago: ^3.3.0
+  flutter_feather_icons: ^2.0.0+1
 
 
 dev_dependencies:

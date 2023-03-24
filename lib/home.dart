@@ -8,6 +8,7 @@ import 'package:health/screens/homefeed.dart';
 import 'package:health/screens/profile.dart';
 import 'package:health/screens/protocols.dart';
 import 'package:health/screens/shopping.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -23,25 +24,25 @@ class _HomeState extends State<Home> {
   List pages = [
     {
       'title': 'Home',
-      'icon': Icons.home_outlined,
-      'page': HomeFeed(),
+      'icon': FeatherIcons.home,
+      'page': TimelineView(),
       'index': 0,
     },
     {
       'title': 'Messages',
-      'icon': Icons.messenger_outline,
+      'icon': FeatherIcons.messageSquare,
       'page': const RoomsPage(),
       'index': 1,
     },
     {
       'title': 'Protocols',
-      'icon': Icons.book_outlined,
+      'icon': FeatherIcons.fileText,
       'page': const Protocols(),
       'index': 2,
     },
     {
       'title': 'Shopping',
-      'icon': Icons.shopping_cart_outlined,
+      'icon': FeatherIcons.shoppingCart,
       'page': ShoppingScreen(),
       'index': 3,
     },
@@ -49,10 +50,19 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    var scaffoldkey = GlobalKey<ScaffoldState>();
     return Scaffold(
+      key: scaffoldkey,
       //white appbar with searchbar menu and profile
       appBar: _page == 0 || _page == 3
           ? AppBar(
+              leading: IconButton(
+                icon: const Icon(FeatherIcons.menu),
+                color: Colors.black,
+                onPressed: () {
+                  scaffoldkey.currentState!.openDrawer();
+                },
+              ),
               systemOverlayStyle: const SystemUiOverlayStyle(
                 statusBarColor: Colors.white,
                 statusBarIconBrightness: Brightness.dark,
@@ -84,7 +94,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.person),
+                  icon: const Icon(FeatherIcons.user),
                   color: Colors.black,
                   onPressed: () {
                     Navigator.push(
