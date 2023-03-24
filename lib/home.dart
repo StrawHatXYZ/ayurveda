@@ -19,6 +19,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _page = 0;
+  void onTabTapped(int index) {
+    setState(() {
+      _page = index;
+    });
+  }
 
   //Pages widget
   List pages = [
@@ -36,33 +41,24 @@ class _HomeState extends State<Home> {
     },
     {
       'title': 'Protocols',
-      'icon': FeatherIcons.fileText,
+      'icon': FeatherIcons.book,
       'page': const Protocols(),
       'index': 2,
     },
     {
       'title': 'Shopping',
       'icon': FeatherIcons.shoppingCart,
-      'page': ShoppingScreen(),
+      'page': const ShoppingScreen(),
       'index': 3,
     },
   ];
 
   @override
   Widget build(BuildContext context) {
-    var scaffoldkey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      key: scaffoldkey,
       //white appbar with searchbar menu and profile
       appBar: _page == 0 || _page == 3
           ? AppBar(
-              leading: IconButton(
-                icon: const Icon(FeatherIcons.menu),
-                color: Colors.black,
-                onPressed: () {
-                  scaffoldkey.currentState!.openDrawer();
-                },
-              ),
               systemOverlayStyle: const SystemUiOverlayStyle(
                 statusBarColor: Colors.white,
                 statusBarIconBrightness: Brightness.dark,
@@ -157,20 +153,12 @@ class _HomeState extends State<Home> {
       ),
       //open drawer
 
-      body: PageTransitionSwitcher(
-        transitionBuilder: (
-          Widget child,
-          Animation<double> animation,
-          Animation<double> secondaryAnimation,
-        ) {
-          return SharedAxisTransition(
-            transitionType: SharedAxisTransitionType.horizontal,
-            animation: animation,
-            secondaryAnimation: secondaryAnimation,
-            child: child,
-          );
-        },
-        child: pages[_page]['page'],
+      body: IndexedStack(
+        /// Replaced with IndexedStack
+        index: _page,
+        children: [
+          for (Map item in pages) item['page'],
+        ],
       ),
       floatingActionButton: _page == 0
           ? FloatingActionButton(
@@ -179,56 +167,28 @@ class _HomeState extends State<Home> {
               onPressed: () {},
             )
           : null,
-      bottomNavigationBar: BottomAppBar(
-        height: 60,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _page,
         elevation: 0,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(width: 5),
-            for (Map item in pages)
-              Padding(
-                padding: const EdgeInsets.only(top: 5.0),
-                child: IconButton(
-                  icon: Icon(
-                    item['icon'],
-                    color: item['index'] != _page
-                        ? Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Colors.black
-                        : Theme.of(context).colorScheme.secondary,
-                    size: 25.0,
-                  ),
-                  onPressed: () => navigationTapped(item['index']),
-                ),
-              ),
-            const SizedBox(width: 5),
-          ],
-        ),
+        backgroundColor: Colors.white,
+        selectedItemColor: Theme.of(context).colorScheme.secondary,
+        unselectedItemColor: Colors.grey,
+        onTap: (index) {
+          setState(() {
+            _page = index;
+          });
+        },
+        showSelectedLabels: true,
+        showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
+        items: [
+          for (Map item in pages)
+            BottomNavigationBarItem(
+              icon: Icon(item['icon']),
+              label: item['title'],
+            ),
+        ],
       ),
     );
-  }
-
-  buildFab() {
-    return SizedBox(
-        height: 45.0,
-        width: 45.0,
-        // ignore: missing_required_param
-        child: FloatingActionButton(
-          backgroundColor: Colors.white,
-          child: Icon(
-            Icons.add_outlined,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-          onPressed: () {},
-        ));
-  }
-
-  void navigationTapped(int page) {
-    setState(() {
-      _page = page;
-    });
   }
 }

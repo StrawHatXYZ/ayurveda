@@ -6,65 +6,55 @@ class TimelineView extends StatelessWidget {
 //Sample data for timeline
   final List<Map<String, dynamic>> _timelineData = [
     {
-      'title': 'John Doe',
-      'subtitle': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'time': '2 hours ago',
-      'image': 'https://picsum.photos/210/300',
+      'title': 'Khalid',
+      'subtitle':
+          'Kudo millet is a good source of protein. It is also rich in fiber, vitamins, and minerals. ',
+      'time': '12 mins ago',
+      //random person image
+      'user_image': 'https://randomuser.me/api/portraits/men/9.jpg',
+      //random post image
+      'post_image':
+          'https://thumbs.dreamstime.com/b/bajra-pearl-millet-glass-bowl-205225996.jpg',
     },
     {
-      'title': 'John Doe',
-      'subtitle': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      'title': 'Aryan',
+      'subtitle':
+          'Bajra Pearl Millet is a good source of protein. It is also rich in fiber, vitamins, and minerals. ',
       'time': '2 hours ago',
-      'image': 'https://picsum.photos/200/300',
+      'user_image': 'https://randomuser.me/api/portraits/men/76.jpg',
+      'post_image':
+          'https://thumbs.dreamstime.com/b/kodo-millet-brown-color-paspalum-scrobiculatum-169401257.jpg',
     },
     {
-      'title': 'John Doe',
-      'subtitle': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      'title': 'Sara',
+      'subtitle':
+          'Ragi is a good source of protein. It is also rich in fiber, vitamins, and minerals. ',
       'time': '2 hours ago',
-      'image': 'https://picsum.photos/200/300',
+      'user_image': 'https://randomuser.me/api/portraits/women/56.jpg',
+      'post_image':
+          'https://thumbs.dreamstime.com/b/ragi-finger-millet-balls-which-healthy-southern-indian-food-white-ceramic-plate-ragi-finger-millet-balls-stack-115647584.jpg',
     },
     {
-      'title': 'John Doe',
+      'title': 'Tina',
       'subtitle': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
       'time': '2 hours ago',
-      'image': 'https://picsum.photos/200/300',
+      'user_image': 'https://randomuser.me/api/portraits/women/11.jpg',
+      'post_image': 'https://picsum.photos/200/300',
     },
     {
-      'title': 'John Doe',
+      'title': 'Kristina',
       'subtitle': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
       'time': '2 hours ago',
-      'image': 'https://picsum.photos/200/300',
+      'user_image': 'https://randomuser.me/api/portraits/women/11.jpg',
+      'post_image': 'https://picsum.photos/200/300',
     },
     {
-      'title': 'John Doe',
+      'title': 'Leonardo',
       'subtitle': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
       'time': '2 hours ago',
-      'image': 'https://picsum.photos/200/300',
-    },
-    {
-      'title': 'John Doe',
-      'subtitle': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'time': '2 hours ago',
-      'image': 'https://picsum.photos/200/300',
-    },
-    {
-      'title': 'John Doe',
-      'subtitle': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'time': '2 hours ago',
-      'image': 'https://picsum.photos/200/300',
-    },
-    {
-      'title': 'John Doe',
-      'subtitle': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'time': '2 hours ago',
-      'image': 'https://picsum.photos/200/300',
-    },
-    {
-      'title': 'John Doe',
-      'subtitle': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'time': '2 hours ago',
-      'image': 'https://picsum.photos/200/300',
-    },
+      'user_image': 'https://randomuser.me/api/portraits/men/22.jpg',
+      'post_image': 'https://picsum.photos/200/300',
+    }
   ];
 
   @override
@@ -78,7 +68,8 @@ class TimelineView extends StatelessWidget {
               title: _timelineData[i]['title'],
               subtitle: _timelineData[i]['subtitle'],
               time: _timelineData[i]['time'],
-              image: _timelineData[i]['image'],
+              user_image: _timelineData[i]['user_image'],
+              post_image: _timelineData[i]['post_image'],
             ),
         ],
       ),
@@ -207,14 +198,16 @@ class TimelineTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final String time;
-  final String image;
+  final String user_image;
+  final String post_image;
 
   const TimelineTile(
       {Key? key,
       required this.title,
       required this.subtitle,
       required this.time,
-      required this.image})
+      required this.user_image,
+      required this.post_image})
       : super(key: key);
 
   @override
@@ -232,7 +225,7 @@ class TimelineTile extends StatelessWidget {
               contentPadding: const EdgeInsets.all(0),
               leading: CircleAvatar(
                 radius: 30,
-                backgroundImage: NetworkImage(image),
+                backgroundImage: NetworkImage(user_image),
               ),
               title: Text(title,
                   style: Theme.of(context)
@@ -256,11 +249,16 @@ class TimelineTile extends StatelessWidget {
                 : Text(
                     subtitle,
                     textAlign: TextAlign.left,
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        fontSize: 17,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black87),
                   ),
+            SizedBox(height: 10),
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
-                image,
+                post_image,
                 height: 200,
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
@@ -273,18 +271,22 @@ class TimelineTile extends StatelessWidget {
                   children: [
                     IconButton(
                         onPressed: null,
-                        icon: Icon(FeatherIcons.heart),
-                        color: Theme.of(context).iconTheme.color),
+                        icon: Icon(FeatherIcons.heart,
+                            color: Theme.of(context).iconTheme.color)),
                     IconButton(
                         onPressed: null,
                         icon: Icon(FeatherIcons.messageCircle,
+                            color: Theme.of(context).iconTheme.color)),
+                    IconButton(
+                        onPressed: null,
+                        icon: Icon(FeatherIcons.share,
                             color: Theme.of(context).iconTheme.color))
                   ],
                 ),
                 IconButton(
                     onPressed: null,
                     icon: Icon(
-                      FeatherIcons.share,
+                      FeatherIcons.bookmark,
                       color: Theme.of(context).iconTheme.color,
                     ))
               ],
