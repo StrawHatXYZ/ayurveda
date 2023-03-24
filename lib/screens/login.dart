@@ -14,6 +14,7 @@ class _LoginPageState extends State<LoginPage> {
   String _email = '';
   String _password = '';
   String _errorMessage = '';
+  bool _isLoading = false;
 
   bool obscureText = true;
 
@@ -162,47 +163,57 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 8.0),
-                  SizedBox(
-                    height: 45.0,
-                    width: 60.0,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40.0),
+                  _isLoading
+                      ? const CircularProgressIndicator()
+                      : SizedBox(
+                          height: 45.0,
+                          width: 60.0,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(40.0),
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                            // highlightElevation: 4.0,
+                            child: Text(
+                              'Log in'.toUpperCase(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                try {
+                                  await _auth.signInWithEmailAndPassword(
+                                    email: _email,
+                                    password: _password,
+                                  );
+                                  setState(() {
+                                    _isLoading = false;
+                                  });
+                                  Navigator.pushReplacementNamed(
+                                      context, '/home');
+                                } on FirebaseAuthException catch (e) {
+                                  setState(() {
+                                    _isLoading = false;
+                                    _errorMessage = e.message!;
+                                  });
+                                }
+                              }
+                            },
                           ),
                         ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          Theme.of(context).colorScheme.secondary,
-                        ),
-                      ),
-                      // highlightElevation: 4.0,
-                      child: Text(
-                        'Log in'.toUpperCase(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          try {
-                            await _auth.signInWithEmailAndPassword(
-                              email: _email,
-                              password: _password,
-                            );
-                            Navigator.pushReplacementNamed(context, '/home');
-                          } on FirebaseAuthException catch (e) {
-                            setState(() {
-                              _errorMessage = e.message!;
-                            });
-                          }
-                        }
-                      },
-                    ),
-                  ),
                   const SizedBox(height: 10.0),
                   if (_errorMessage.isNotEmpty)
                     Text(

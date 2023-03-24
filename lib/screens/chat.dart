@@ -25,6 +25,15 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   bool _isAttachmentUploading = false;
+  var user;
+  @override
+  void initState() {
+    user =
+        FirebaseChatCore.instance.firebaseUser?.uid == widget.room.users[0].id
+            ? widget.room.users[1]
+            : widget.room.users[0];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -35,11 +44,11 @@ class _ChatPageState extends State<ChatPage> {
           title: Row(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(widget.room.users[1].imageUrl ??
-                    'https://ui-avatars.com/api/?name=unkow'),
+                backgroundImage: NetworkImage(
+                    user.imageUrl ?? 'https://ui-avatars.com/api/?name=unkow'),
               ),
               const SizedBox(width: 8),
-              Text(widget.room.users[1].firstName ?? ''),
+              Text(user.firstName ?? ''),
             ],
           ),
         ),
