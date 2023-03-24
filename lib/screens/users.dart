@@ -74,7 +74,7 @@ class _UsersPageState extends State<UsersPage> {
                                 style: const TextStyle(
                                     fontSize: 18, color: Colors.black87)),
                             Text(
-                              getUserEmail(user),
+                              user.imageUrl!.split("=")[1],
                               style: const TextStyle(
                                   fontSize: 14, color: Colors.grey),
                             ),
@@ -91,7 +91,7 @@ class _UsersPageState extends State<UsersPage> {
       );
 
   Widget _buildAvatar(types.User user) {
-    final color = const Color.fromARGB(255, 194, 243, 255);
+    const color = Color.fromARGB(255, 194, 243, 255);
     final name = getUserName(user);
 
     return Container(
