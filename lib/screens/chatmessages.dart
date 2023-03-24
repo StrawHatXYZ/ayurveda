@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'chat.dart';
-import 'util.dart';
 import 'users.dart';
 
 class RoomsPage extends StatefulWidget {
@@ -130,10 +129,20 @@ class _RoomsPageState extends State<RoomsPage> {
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black87),
                                 ),
-                                //Last message
-                                const Text("Last message",
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.black54)),
+                                room.lastMessages != null &&
+                                        room.lastMessages!.isNotEmpty
+                                    ? Text(
+                                        room.lastMessages!.last
+                                            .toJson()['text']
+                                            .toString(),
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black54),
+                                      )
+                                    : const Text("Last message",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black54)),
                               ],
                             ),
                             const Spacer(),
@@ -210,7 +219,7 @@ class _RoomsPageState extends State<RoomsPage> {
 
 //avatar with active status`
   Widget _buildAvatar(types.Room room) {
-    var color = Color.fromARGB(171, 194, 243, 255);
+    var color = const Color.fromARGB(171, 194, 243, 255);
 
     if (room.type == types.RoomType.direct) {
       try {

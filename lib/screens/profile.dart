@@ -1,9 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:health/constants.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
-class UserProfileScreen extends StatelessWidget {
+class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
+
+  @override
+  State<UserProfileScreen> createState() => _UserProfileScreenState();
+}
+
+class _UserProfileScreenState extends State<UserProfileScreen> {
+  final User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -26,22 +34,22 @@ class UserProfileScreen extends StatelessWidget {
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                CircleAvatar(
+              children: <Widget>[
+                const CircleAvatar(
                   radius: 50.0,
                   backgroundImage: AssetImage('assets/images/user.jpg'),
                 ),
-                SizedBox(height: 10.0),
+                const SizedBox(height: 10.0),
                 Text(
-                  'George Silva',
-                  style: TextStyle(
+                  user?.email?.split('@')[0] ?? "Jhon Doe",
+                  style: const TextStyle(
                     fontSize: 22.0,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
-                SizedBox(height: 5.0),
-                Text(
+                const SizedBox(height: 5.0),
+                const Text(
                   'Flutter Developer',
                   style: TextStyle(
                     fontSize: 18.0,
@@ -56,35 +64,35 @@ class UserProfileScreen extends StatelessWidget {
               padding: EdgeInsets.all(Constants(context).height * 0.01),
               child: Column(
                 children: <Widget>[
-                  const ListTile(
-                    title: Text('Email'),
-                    subtitle: Text('george.silva@example.com'),
-                    leading: Icon(Icons.email),
+                  ListTile(
+                    title: const Text('Email'),
+                    subtitle: Text(user?.email ?? "No email"),
+                    leading: const Icon(FeatherIcons.mail),
                   ),
                   const Divider(),
                   const ListTile(
                     title: Text('Phone'),
                     subtitle: Text('+(902) 936-6880'),
-                    leading: Icon(Icons.phone),
+                    leading: Icon(FeatherIcons.phone),
                   ),
                   const Divider(),
                   const ListTile(
                     title: Text('Address'),
                     subtitle: Text('9538 E Sandy Lake Rd'),
-                    leading: Icon(Icons.home),
+                    leading: Icon(FeatherIcons.home),
                   ),
                   const Divider(),
                   const ListTile(
                     title: Text('Website'),
                     subtitle: Text('johndoe.com'),
-                    leading: Icon(Icons.link),
+                    leading: Icon(FeatherIcons.link),
                   ),
                   const Divider(),
                   //Sign out lsit tile
                   ListTile(
                     iconColor: Colors.black,
                     textColor: Colors.black,
-                    leading: const Icon(Icons.exit_to_app),
+                    leading: const Icon(Icons.logout),
                     title: const Text('Signout'),
                     onTap: () {
                       FirebaseAuth.instance.signOut();
