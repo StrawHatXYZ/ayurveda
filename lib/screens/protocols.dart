@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
 
 class Protocols extends StatefulWidget {
   const Protocols({super.key});
@@ -27,8 +26,8 @@ class _ProtocolsState extends State<Protocols> {
             ),
           ),
         ),
-        body: Center(
-          child: const Text(' PDF Here'),
+        body: const Center(
+          child: Text(' PDF Here'),
         ),
       ),
     );

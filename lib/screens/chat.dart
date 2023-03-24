@@ -46,7 +46,7 @@ class _ChatPageState extends State<ChatPage> {
               CircleAvatar(
                 backgroundColor: const Color.fromARGB(255, 194, 243, 255),
                 child: Text(
-                  widget.room.users[1].firstName!.substring(0, 2).toUpperCase(),
+                  user.firstName!.substring(0, 2).toUpperCase(),
                   style: const TextStyle(
                     color: Colors.cyan,
                     fontSize: 20,
@@ -59,8 +59,8 @@ class _ChatPageState extends State<ChatPage> {
               //User name of the  selected user
               Text(
                 //Capitalizing the first letter of the name
-                widget.room.users[1].firstName!.substring(0, 1).toUpperCase() +
-                    widget.room.users[1].firstName!.substring(1),
+                user.firstName!.substring(0, 1).toUpperCase() +
+                    user.firstName!.substring(1),
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 24,
