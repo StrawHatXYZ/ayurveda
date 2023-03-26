@@ -37,6 +37,7 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        //add red background color
         appBar: AppBar(
           // systemOverlayStyle: SystemUiOverlayStyle.light,
           backgroundColor: Colors.white,
@@ -77,12 +78,38 @@ class _ChatPageState extends State<ChatPage> {
             initialData: const [],
             stream: FirebaseChatCore.instance.messages(snapshot.data!),
             builder: (context, snapshot) => Chat(
+              theme: const DefaultChatTheme(
+                backgroundColor: Color.fromARGB(197, 222, 221, 221),
+                inputBackgroundColor: Colors.white,
+                inputBorderRadius: BorderRadius.all(Radius.circular(30)),
+                inputTextColor: Colors.black,
+                primaryColor: Color.fromARGB(255, 24, 159, 192),
+                secondaryColor: Colors.white,
+                sendButtonIcon: Icon(
+                  Icons.send,
+                  color: Colors.cyan,
+                ),
+                attachmentButtonIcon: Icon(
+                  Icons.attach_file,
+                  color: Colors.cyan,
+                ),
+                inputMargin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                inputPadding: EdgeInsets.fromLTRB(24, 15, 24, 15),
+              ),
               isAttachmentUploading: _isAttachmentUploading,
               messages: snapshot.data ?? [],
               onAttachmentPressed: _handleAtachmentPressed,
               onMessageTap: _handleMessageTap,
               onPreviewDataFetched: _handlePreviewDataFetched,
               onSendPressed: _handleSendPressed,
+              l10n: const ChatL10nEn(
+                inputPlaceholder: 'Type your message here...',
+                emptyChatPlaceholder: String.fromEnvironment(
+                  'EMPTY_CHAT_PLACEHOLDER',
+                  defaultValue: 'No messages yet',
+                ),
+              ),
+              //custom bottom widget with input field and icons
               user: types.User(
                 id: FirebaseChatCore.instance.firebaseUser?.uid ?? '',
               ),

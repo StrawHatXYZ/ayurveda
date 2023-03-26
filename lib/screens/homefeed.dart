@@ -215,7 +215,7 @@ class TimelineTile extends StatelessWidget {
     return Card(
       elevation: 0,
       color: Theme.of(context).cardColor,
-      margin: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(left: 16, right: 16),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

@@ -9,6 +9,7 @@ import 'package:health/screens/profile.dart';
 import 'package:health/screens/protocols.dart';
 import 'package:health/screens/shopping.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:health/searchscreen.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -67,8 +68,9 @@ class _HomeState extends State<Home> {
               elevation: 0,
               actions: [
                 Container(
+                  margin: const EdgeInsets.symmetric(vertical: 2),
                   width: Constants(context).width * 0.75,
-                  height: Constants(context).height * 0.05,
+                  height: Constants(context).height * 0.45,
                   decoration: BoxDecoration(
                     color: Colors.grey.shade200,
                     borderRadius: BorderRadius.circular(30),
@@ -80,10 +82,24 @@ class _HomeState extends State<Home> {
                         color: Colors.black,
                         onPressed: () {},
                       ),
-                      const Center(
-                        child: Text(
-                          'Search for something',
-                          style: TextStyle(color: Colors.grey),
+                      //Searchbar onclick open search page
+                      Expanded(
+                        child: TextField(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const SearchScreen()),
+                            );
+                          },
+                          //Ontap outside remove focus
+                          onTapOutside: (value) {
+                            FocusScope.of(context).unfocus();
+                          },
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Search',
+                          ),
                         ),
                       ),
                     ],
@@ -103,23 +119,49 @@ class _HomeState extends State<Home> {
               ],
             )
           : null,
+      //Drawer user profile pic and name
       drawer: Drawer(
         backgroundColor: Colors.white,
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.cyan,
-              ),
-              child: Text(
-                'Drawer ',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
+            DrawerHeader(
+                decoration: const BoxDecoration(
+                  color: Colors.cyan,
                 ),
-              ),
-            ),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundImage: AssetImage('assets/images/user.jpg'),
+                    ),
+                    SizedBox(width: 20),
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            FirebaseAuth.instance.currentUser?.email
+                                    ?.split('@')[0]
+                                    .toUpperCase() ??
+                                "John Doe",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                          Text(
+                            FirebaseAuth.instance.currentUser?.email
+                                    ?.toLowerCase() ??
+                                "John Doe",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ]),
+                  ],
+                )),
             const ListTile(
               iconColor: Colors.black,
               textColor: Colors.black,

@@ -41,7 +41,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
                 const SizedBox(height: 10.0),
                 Text(
-                  user?.email?.split('@')[0] ?? "Jhon Doe",
+                  user?.email?.split('@')[0].toUpperCase() ?? "John Doe",
                   style: const TextStyle(
                     fontSize: 22.0,
                     fontWeight: FontWeight.bold,
