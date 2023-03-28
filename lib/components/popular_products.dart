@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:health/models/Product.dart';
+import 'package:health/models/product_model.dart';
 import 'package:health/components/product_card.dart';
 import 'package:health/components/section_title.dart';
 
