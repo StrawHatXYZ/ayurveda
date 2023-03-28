@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:health/models/Product.dart';
+import 'package:health/models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
