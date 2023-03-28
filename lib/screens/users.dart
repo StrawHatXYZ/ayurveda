@@ -73,11 +73,6 @@ class _UsersPageState extends State<UsersPage> {
                             Text(getUserName(user),
                                 style: const TextStyle(
                                     fontSize: 18, color: Colors.black87)),
-                            Text(
-                              user.imageUrl!.split("=")[1],
-                              style: const TextStyle(
-                                  fontSize: 14, color: Colors.grey),
-                            ),
                           ],
                         )
                       ],

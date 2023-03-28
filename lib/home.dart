@@ -1,8 +1,8 @@
-import 'package:animations/animations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:health/constants.dart';
+import 'package:health/screens/add_post.dart';
 import 'package:health/screens/chatmessages.dart';
 import 'package:health/screens/homefeed.dart';
 import 'package:health/screens/profile.dart';
@@ -10,6 +10,7 @@ import 'package:health/screens/protocols.dart';
 import 'package:health/screens/shopping.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:health/searchscreen.dart';
+import 'package:health/util.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -24,6 +25,14 @@ class _HomeState extends State<Home> {
     setState(() {
       _page = index;
     });
+  }
+
+  @override
+  void initState() {
+    Util().getPosts().then((value) {
+      print(value.length);
+    });
+    super.initState();
   }
 
   //Pages widget
@@ -131,11 +140,11 @@ class _HomeState extends State<Home> {
                 ),
                 child: Row(
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       radius: 30,
                       backgroundImage: AssetImage('assets/images/user.jpg'),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,7 +154,7 @@ class _HomeState extends State<Home> {
                                     ?.split('@')[0]
                                     .toUpperCase() ??
                                 "John Doe",
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20,
                             ),
@@ -154,7 +163,7 @@ class _HomeState extends State<Home> {
                             FirebaseAuth.instance.currentUser?.email
                                     ?.toLowerCase() ??
                                 "John Doe",
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20,
                             ),
@@ -206,7 +215,13 @@ class _HomeState extends State<Home> {
           ? FloatingActionButton(
               backgroundColor: Theme.of(context).colorScheme.secondary,
               child: const Icon(Icons.add_outlined, color: Colors.white),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CreatePostScreen()),
+                );
+              },
             )
           : null,
       bottomNavigationBar: BottomNavigationBar(

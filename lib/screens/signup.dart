@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import '../auth/auth.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:health/models/user_model.dart ' as user_model;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -13,7 +15,7 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   final _formKey = GlobalKey<FormState>();
-  late String _email, _password, _confirmPassword;
+  late String _email, _password, _confirmPassword, _name;
 
   bool _isLoading = false;
   bool obscureText = true;
@@ -33,11 +35,23 @@ class _SignupPageState extends State<SignupPage> {
         const FirebaseChatCoreConfig('contacts', 'rooms', 'users');
         await FirebaseChatCore.instance.createUserInFirestore(
           types.User(
-            firstName: _email.split('@')[0],
+            firstName: _name.split(' ')[0],
             id: userCredential.user!.uid,
-            imageUrl: 'https://ui-avatars.com/api/?name=$_email',
+            imageUrl: 'https://ui-avatars.com/api/?name=$_name',
           ),
         );
+        final currentUser = userCredential.user;
+        final user = user_model.User(
+            id: currentUser!.uid,
+            fullName: _name,
+            email: _email,
+            address: "",
+            phone: "");
+
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUser.uid)
+            .update(user.toMap());
 
         setState(() {
           _isLoading = false;
@@ -77,6 +91,37 @@ class _SignupPageState extends State<SignupPage> {
                   style: TextStyle(fontSize: 16.0, color: Colors.black54),
                 ),
                 const SizedBox(height: 32.0),
+                TextFormField(
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.email_outlined,
+                      size: 15.0,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+
+                    // fillColor: Colors.white,
+                    filled: true,
+                    hintText: "Full Name",
+                    hintStyle: TextStyle(
+                      color: Colors.grey[400],
+                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 20.0),
+                    border: border(context),
+                    enabledBorder: border(context),
+                    focusedBorder: focusBorder(context),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter your email address';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _name = value!;
+                  },
+                ),
+                const SizedBox(height: 16.0),
                 TextFormField(
                   decoration: InputDecoration(
                     prefixIcon: Icon(

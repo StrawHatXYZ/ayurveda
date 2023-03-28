@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:health/constants.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:health/models/user_model.dart ' as user_model;
+import 'package:health/util.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
@@ -12,6 +14,15 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   final User? user = FirebaseAuth.instance.currentUser;
+  user_model.User? _user;
+
+  @override
+  void initState() {
+    Util().getUser().then((value) => setState(() {
+          _user = value;
+        }));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +52,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
                 const SizedBox(height: 10.0),
                 Text(
-                  user?.email?.split('@')[0].toUpperCase() ?? "John Doe",
+                  "${_user?.fullName.substring(0, 1).toUpperCase()}${_user?.fullName.substring(1)}",
                   style: const TextStyle(
                     fontSize: 22.0,
                     fontWeight: FontWeight.bold,
