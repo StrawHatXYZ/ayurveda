@@ -6,6 +6,8 @@ class Post {
   String title;
   String imageUrl;
   String authorId;
+  String name;
+  String profileUrl;
 
   Timestamp timestamp;
   int likes;
@@ -16,11 +18,15 @@ class Post {
       this.imageUrl = '',
       required this.authorId,
       required this.timestamp,
+      required this.name,
+      this.profileUrl = "",
       this.likes = 0});
 
   factory Post.fromDoc(DocumentSnapshot doc) {
     return Post(
       id: doc.id,
+      profileUrl: doc['profileUrl'],
+      name: doc['name'],
       title: doc['title'],
       imageUrl: doc['imageUrl'],
       authorId: doc['authorId'],
@@ -31,6 +37,8 @@ class Post {
   Map<String, dynamic> toMap() {
     return {
       'title': title,
+      'name': name,
+      'profileUrl': profileUrl,
       'imageUrl': imageUrl,
       'authorId': authorId,
       'timestamp': timestamp,

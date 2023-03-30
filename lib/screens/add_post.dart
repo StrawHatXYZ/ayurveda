@@ -18,19 +18,15 @@ class CreatePostScreen extends StatefulWidget {
 class _CreatePostScreenState extends State<CreatePostScreen> {
   bool isUploading = false;
   File? _image;
-  late Post _post;
+  final Post _post = Post(
+      name: "",
+      title: "",
+      timestamp: Timestamp.now(),
+      likes: 0,
+      imageUrl: "",
+      authorId: FirebaseAuth.instance.currentUser!.uid);
   final picker = ImagePicker();
   final storageRef = FirebaseStorage.instance.ref("posts/");
-  @override
-  void initState() {
-    _post = Post(
-        title: "",
-        timestamp: Timestamp.now(),
-        likes: 0,
-        imageUrl: "",
-        authorId: FirebaseAuth.instance.currentUser!.uid);
-    super.initState();
-  }
 
   Future getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -39,27 +35,58 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     });
   }
 
-  void handleSubmit() {
+  void handleSubmit() async {
     setState(() {
       isUploading = true;
     });
+    final user = await Util().getUser();
+    setState(() {
+      _post.profileUrl = user.imageUrl;
+      _post.name = user.fullName;
+    });
     if (_image?.path != null) {
-      final postImg =
-          storageRef.child('post_${_post.timestamp}').putFile(_image!);
-      postImg.whenComplete(() async {
-        final url =
-            await storageRef.child('post_${_post.timestamp}').getDownloadURL();
-        setState(() {
-          _post.imageUrl = url;
-        });
-        print(url);
+      final postImg = storageRef
+          .child('post_${_post.name}_${_post.timestamp.millisecondsSinceEpoch}')
+          .putFile(_image!);
+      postImg.snapshotEvents.listen((TaskSnapshot taskSnapshot) async {
+        switch (taskSnapshot.state) {
+          case TaskState.running:
+            final progress = 100.0 *
+                (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes);
+            print("Upload is $progress% complete.");
+            break;
+          case TaskState.paused:
+            print("Upload is paused.");
+            break;
+          case TaskState.canceled:
+            print("Upload was canceled");
+            break;
+          case TaskState.error:
+            //show snackbar
+            print("Upload failed");
+            setState(() {
+              isUploading = false;
+            });
+            return;
+
+          case TaskState.success:
+            final url = await taskSnapshot.ref.getDownloadURL();
+            print("sucess");
+            print(_post.toMap());
+            await Util().uploadPost(_post);
+
+            setState(() {
+              isUploading = false;
+              _image = null;
+            });
+            setState(() {
+              _post.imageUrl = url;
+              _post.timestamp = Timestamp.now();
+            });
+            break;
+        }
       });
     }
-    Util().uploadPost(_post);
-
-    setState(() {
-      isUploading = false;
-    });
   }
 
   @override

@@ -46,6 +46,7 @@ class _SignupPageState extends State<SignupPage> {
             fullName: _name,
             email: _email,
             address: "",
+            imageUrl: 'https://ui-avatars.com/api/?name=$_name',
             phone: "");
 
         FirebaseFirestore.instance

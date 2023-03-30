@@ -10,7 +10,6 @@ import 'package:health/screens/protocols.dart';
 import 'package:health/screens/shopping.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:health/searchscreen.dart';
-import 'package:health/util.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -21,22 +20,15 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _page = 0;
+
   void onTabTapped(int index) {
     setState(() {
       _page = index;
     });
   }
 
-  @override
-  void initState() {
-    Util().getPosts().then((value) {
-      print(value.length);
-    });
-    super.initState();
-  }
-
   //Pages widget
-  List pages = [
+  late List pages = [
     {
       'title': 'Home',
       'icon': FeatherIcons.home,
