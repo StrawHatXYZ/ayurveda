@@ -47,8 +47,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     if (_image?.path != null) {
       final postImg = storageRef
           .child('post_${_post.name}_${_post.timestamp.millisecondsSinceEpoch}')
-          .putFile(_image!);
-      postImg.snapshotEvents.listen((TaskSnapshot taskSnapshot) async {
+          .putFile(_image!)
+          .snapshotEvents
+          .listen((TaskSnapshot taskSnapshot) async {
         switch (taskSnapshot.state) {
           case TaskState.running:
             final progress = 100.0 *
@@ -71,18 +72,17 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
           case TaskState.success:
             final url = await taskSnapshot.ref.getDownloadURL();
-            print("sucess");
-            print(_post.toMap());
+            setState(() {
+              _post.imageUrl = url;
+              _post.timestamp = Timestamp.now();
+            });
             await Util().uploadPost(_post);
 
             setState(() {
               isUploading = false;
               _image = null;
             });
-            setState(() {
-              _post.imageUrl = url;
-              _post.timestamp = Timestamp.now();
-            });
+
             break;
         }
       });
