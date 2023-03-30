@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:health/models/user_model.dart ' as user_model;
+import 'package:health/models/user_model.dart' as user_model;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:health/models/post_model.dart';
 

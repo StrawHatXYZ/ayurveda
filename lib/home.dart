@@ -9,7 +9,9 @@ import 'package:health/screens/profile.dart';
 import 'package:health/screens/protocols.dart';
 import 'package:health/screens/shopping.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:health/models/user_model.dart' as user_model;
 import 'package:health/searchscreen.dart';
+import 'package:health/util.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -20,6 +22,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _page = 0;
+  user_model.User? _user;
+  @override
+  void initState() {
+    Util().getUser().then((value) => setState(() {
+          _user = value;
+        }));
+    super.initState();
+  }
 
   void onTabTapped(int index) {
     setState(() {
@@ -32,7 +42,7 @@ class _HomeState extends State<Home> {
     {
       'title': 'Home',
       'icon': FeatherIcons.home,
-      'page': TimelineView(),
+      'page': const TimelineView(),
       'index': 0,
     },
     {
@@ -113,7 +123,9 @@ class _HomeState extends State<Home> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const UserProfileScreen()),
+                          builder: (context) => UserProfileScreen(
+                                user: _user,
+                              )),
                     );
                   },
                 ),
@@ -122,79 +134,106 @@ class _HomeState extends State<Home> {
           : null,
       //Drawer user profile pic and name
       drawer: Drawer(
-        backgroundColor: Colors.white,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-                decoration: const BoxDecoration(
-                  color: Colors.cyan,
-                ),
-                child: Row(
-                  children: [
-                    const CircleAvatar(
-                      radius: 30,
-                      backgroundImage: AssetImage('assets/images/user.jpg'),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  DrawerHeader(
+                    decoration: const BoxDecoration(
+                      color: Colors.cyan,
                     ),
-                    const SizedBox(width: 20),
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            FirebaseAuth.instance.currentUser?.email
-                                    ?.split('@')[0]
-                                    .toUpperCase() ??
-                                "John Doe",
-                            style: const TextStyle(
+                    child: Row(
+                      children: [
+                        //rounded border profile pic
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
                               color: Colors.white,
-                              fontSize: 20,
+                              width: 2,
                             ),
                           ),
-                          Text(
-                            FirebaseAuth.instance.currentUser?.email
-                                    ?.toLowerCase() ??
-                                "John Doe",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Image.network(
+                              //Get user profile pic
+                              _user?.imageUrl ?? "assets/images/user.jpg",
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        ]),
-                  ],
-                )),
-            const ListTile(
-              iconColor: Colors.black,
-              textColor: Colors.black,
-              leading: Icon(Icons.message),
-              title: Text('Messages'),
-            ),
-            const ListTile(
-              iconColor: Colors.black,
-              textColor: Colors.black,
-              leading: Icon(Icons.account_circle),
-              title: Text('Profile'),
-            ),
-            const ListTile(
-              iconColor: Colors.black,
-              textColor: Colors.black,
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
-            ),
-            ListTile(
-              iconColor: Colors.black,
-              textColor: Colors.black,
-              leading: const Icon(Icons.exit_to_app),
-              title: const Text('Signout'),
-              onTap: () {
-                FirebaseAuth.instance.signOut();
-                Navigator.of(context).pushReplacementNamed('/login');
-              },
+                        ),
+
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                //Authenticated User name
+                                //Get username fullname _user.name
+                                _user?.fullName ?? "User Name",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                _user?.email ?? "User Email",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const ListTile(
+                    iconColor: Colors.black,
+                    textColor: Colors.black,
+                    leading: Icon(Icons.message),
+                    title: Text('Messages'),
+                  ),
+                  const ListTile(
+                    iconColor: Colors.black,
+                    textColor: Colors.black,
+                    leading: Icon(Icons.account_circle),
+                    title: Text('Profile'),
+                  ),
+                  const ListTile(
+                    iconColor: Colors.black,
+                    textColor: Colors.black,
+                    leading: Icon(Icons.settings),
+                    title: Text('Settings'),
+                  ),
+                  ListTile(
+                    iconColor: Colors.black,
+                    textColor: Colors.black,
+                    leading: const Icon(Icons.exit_to_app),
+                    title: const Text('Signout'),
+                    onTap: () {
+                      FirebaseAuth.instance.signOut();
+                      Navigator.of(context).pushReplacementNamed('/login');
+                    },
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
-      //open drawer
 
       body: IndexedStack(
         /// Replaced with IndexedStack

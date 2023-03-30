@@ -2,36 +2,35 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:health/constants.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:health/models/user_model.dart ' as user_model;
+import 'package:health/models/user_model.dart' as user_model;
 import 'package:health/util.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({super.key});
+  user_model.User? user;
+
+  UserProfileScreen({super.key, required this.user});
 
   @override
   State<UserProfileScreen> createState() => _UserProfileScreenState();
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  final User? user = FirebaseAuth.instance.currentUser;
-  user_model.User? _user;
-
-  @override
-  void initState() {
-    Util().getUser().then((value) => setState(() {
-          _user = value;
-        }));
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
+    user_model.User? user = widget.user;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('User Profile'),
         elevation: 0,
         backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(
+            FeatherIcons.chevronLeft,
+            color: Colors.black,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: Column(
         children: <Widget>[
@@ -46,13 +45,26 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const CircleAvatar(
-                  radius: 50.0,
-                  backgroundImage: AssetImage('assets/images/user.jpg'),
+                Container(
+                  height: 80,
+                  width: 80,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.fromBorderSide(
+                      BorderSide(
+                        color: Colors.white,
+                        width: 2.0,
+                      ),
+                    ),
+                  ),
+                  child: CircleAvatar(
+                    radius: 50.0,
+                    backgroundImage: NetworkImage(user?.imageUrl ?? "No image"),
+                  ),
                 ),
                 const SizedBox(height: 10.0),
                 Text(
-                  "${_user?.fullName.substring(0, 1).toUpperCase()}${_user?.fullName.substring(1)}",
+                  user?.fullName ?? "No name",
                   style: const TextStyle(
                     fontSize: 22.0,
                     fontWeight: FontWeight.bold,

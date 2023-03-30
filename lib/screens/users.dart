@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 
 import 'chat.dart';
@@ -22,6 +23,13 @@ class _UsersPageState extends State<UsersPage> {
           backgroundColor: Colors.white,
           title: const Text('Users'),
           elevation: 0,
+          leading: IconButton(
+            icon: const Icon(
+              FeatherIcons.chevronLeft,
+              color: Colors.black,
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
         ),
         body: StreamBuilder<List<types.User>>(
           stream: FirebaseChatCore.instance.users(),

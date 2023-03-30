@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import '../auth/auth.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:health/models/user_model.dart ' as user_model;
+import 'package:health/models/user_model.dart' as user_model;
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignupPage extends StatefulWidget {
@@ -46,7 +46,8 @@ class _SignupPageState extends State<SignupPage> {
             fullName: _name,
             email: _email,
             address: "",
-            imageUrl: 'https://ui-avatars.com/api/?name=$_name',
+            imageUrl:
+                'https://ui-avatars.com/api/?name=$_name&background=0D8ABC&color=fff',
             phone: "");
 
         FirebaseFirestore.instance

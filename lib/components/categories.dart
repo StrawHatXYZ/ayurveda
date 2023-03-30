@@ -59,6 +59,7 @@ class CategoryCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: SvgPicture.asset(icon!,
+                  // ignore: deprecated_member_use
                   color: const Color.fromARGB(197, 7, 91, 127)),
             ),
             const SizedBox(height: 5),

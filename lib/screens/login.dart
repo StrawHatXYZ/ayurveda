@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:health/screens/auth_errors.dart';
+import 'package:health/screens/custom_error.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,7 +15,6 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   String _email = '';
   String _password = '';
-  String _errorMessage = '';
   bool _isLoading = false;
 
   bool obscureText = true;
@@ -208,7 +209,17 @@ class _LoginPageState extends State<LoginPage> {
                           } on FirebaseAuthException catch (e) {
                             setState(() {
                               _isLoading = false;
-                              _errorMessage = e.message!;
+                              var errorMessage =
+                                  AuthErrors.getErrorText(e.code);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      content: CustomSnackBarContent(
+                                        errorText: errorMessage,
+                                      )));
+                              print(e);
                             });
                           }
                         }
@@ -216,14 +227,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 10.0),
-                  if (_errorMessage.isNotEmpty)
-                    Text(
-                      _errorMessage,
-                      style: const TextStyle(
-                        color: Colors.red,
-                        fontSize: 16.0,
-                      ),
-                    ),
                 ],
               ),
             ),
