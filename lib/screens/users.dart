@@ -16,6 +16,8 @@ class UsersPage extends StatefulWidget {
 
 class _UsersPageState extends State<UsersPage> {
   @override
+  bool _isLoading = false;
+
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -45,50 +47,58 @@ class _UsersPageState extends State<UsersPage> {
               );
             }
 
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                final user = snapshot.data![index];
-                return GestureDetector(
-                  onTap: () {
-                    _handlePressed(user, context);
-                  },
-                  behavior: HitTestBehavior.opaque,
-                  child: Container(
-                    //onhover change color
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Colors.grey,
-                          width: 0.4,
+            return _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      final user = snapshot.data![index];
+                      return GestureDetector(
+                        onTap: () {
+                          _handlePressed(user, context);
+                          setState(() {
+                            //set circular progress indicator
+                            _isLoading = true;
+                          });
+                        },
+                        behavior: HitTestBehavior.opaque,
+                        child: Container(
+                          //onhover change color
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            border: Border(
+                              bottom: BorderSide(
+                                color: Colors.grey,
+                                width: 0.4,
+                              ),
+                            ),
+                          ),
+                          margin: EdgeInsets.only(
+                            bottom: index == snapshot.data!.length - 1 ? 16 : 0,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
+                          child: Row(
+                            children: [
+                              _buildAvatar(user),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(getUserName(user),
+                                      style: const TextStyle(
+                                          fontSize: 18, color: Colors.black87)),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-                    margin: EdgeInsets.only(
-                      bottom: index == snapshot.data!.length - 1 ? 16 : 0,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 14,
-                    ),
-                    child: Row(
-                      children: [
-                        _buildAvatar(user),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(getUserName(user),
-                                style: const TextStyle(
-                                    fontSize: 18, color: Colors.black87)),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
+                      );
+                    },
+                  );
           },
         ),
       );
@@ -124,5 +134,9 @@ class _UsersPageState extends State<UsersPage> {
         ),
       ),
     );
+    setState(() {
+      //set circular progress indicator
+      _isLoading = false;
+    });
   }
 }

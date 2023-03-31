@@ -1,5 +1,5 @@
 // import 'package:flutter/material.dart';
-// import 'package:health/screens/chatmessages.dart';
+// import 'package:ayurveda/screens/chatmessages.dart';
 
 // class MessagesScreen extends StatelessWidget {
 //   final List<Message> messages = [

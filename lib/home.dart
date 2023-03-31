@@ -1,17 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:health/constants.dart';
-import 'package:health/screens/add_post.dart';
-import 'package:health/screens/chatmessages.dart';
-import 'package:health/screens/homefeed.dart';
-import 'package:health/screens/profile.dart';
-import 'package:health/screens/protocols.dart';
-import 'package:health/screens/shopping.dart';
+import 'package:ayurveda/constants.dart';
+import 'package:ayurveda/screens/add_post.dart';
+import 'package:ayurveda/screens/chatmessages.dart';
+import 'package:ayurveda/screens/homefeed.dart';
+import 'package:ayurveda/screens/profile.dart';
+import 'package:ayurveda/screens/protocols.dart';
+import 'package:ayurveda/screens/shopping.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:health/models/user_model.dart' as user_model;
-import 'package:health/searchscreen.dart';
-import 'package:health/util.dart';
+import 'package:ayurveda/models/user_model.dart' as user_model;
+import 'package:ayurveda/searchscreen.dart';
+import 'package:ayurveda/util.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -60,7 +60,7 @@ class _HomeState extends State<Home> {
     {
       'title': 'Shopping',
       'icon': FeatherIcons.shoppingCart,
-      'page': const ShoppingScreen(),
+      'page': ShoppingScreen(),
       'index': 3,
     },
   ];
@@ -200,23 +200,44 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                   ),
-                  const ListTile(
+                  ListTile(
                     iconColor: Colors.black,
                     textColor: Colors.black,
-                    leading: Icon(Icons.message),
-                    title: Text('Messages'),
+                    leading: const Icon(FeatherIcons.messageSquare),
+                    title: const Text('Messages'),
+                    onTap: () => {
+                      setState(() {
+                        _page = 1;
+                        Navigator.pop(context);
+                      }),
+                    },
                   ),
-                  const ListTile(
+                  ListTile(
                     iconColor: Colors.black,
                     textColor: Colors.black,
-                    leading: Icon(Icons.account_circle),
-                    title: Text('Profile'),
+                    leading: const Icon(FeatherIcons.user),
+                    title: const Text('Profile'),
+                    onTap: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UserProfileScreen(
+                                  user: _user,
+                                )),
+                      ),
+                    },
                   ),
-                  const ListTile(
+                  ListTile(
                     iconColor: Colors.black,
                     textColor: Colors.black,
-                    leading: Icon(Icons.settings),
-                    title: Text('Settings'),
+                    leading: const Icon(FeatherIcons.book),
+                    title: const Text('Protocols'),
+                    onTap: () => {
+                      setState(() {
+                        _page = 2;
+                        Navigator.pop(context);
+                      }),
+                    },
                   ),
                   ListTile(
                     iconColor: Colors.black,

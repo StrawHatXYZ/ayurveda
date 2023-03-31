@@ -79,7 +79,7 @@ class _ChatPageState extends State<ChatPage> {
             stream: FirebaseChatCore.instance.messages(snapshot.data!),
             builder: (context, snapshot) => Chat(
               theme: const DefaultChatTheme(
-                backgroundColor: Color.fromARGB(197, 222, 221, 221),
+                backgroundColor: Color.fromARGB(197, 231, 231, 231),
                 inputBackgroundColor: Colors.white,
                 inputBorderRadius: BorderRadius.all(Radius.circular(30)),
                 inputTextColor: Colors.black,

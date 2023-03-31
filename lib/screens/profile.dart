@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:health/constants.dart';
+import 'package:ayurveda/constants.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:health/models/user_model.dart' as user_model;
-import 'package:health/util.dart';
+import 'package:ayurveda/models/user_model.dart' as user_model;
+import 'package:ayurveda/util.dart';
 
 class UserProfileScreen extends StatefulWidget {
   user_model.User? user;

@@ -86,6 +86,7 @@ class _RoomsPageState extends State<RoomsPage> {
 
                     return GestureDetector(
                       onTap: () {
+                        //Ontap circular progress indicator and go to chat page
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => ChatPage(
@@ -93,6 +94,7 @@ class _RoomsPageState extends State<RoomsPage> {
                             ),
                           ),
                         );
+                        //Circular progress indicator
                       },
                       child: Container(
                         margin: EdgeInsets.only(
@@ -125,7 +127,7 @@ class _RoomsPageState extends State<RoomsPage> {
                                   room.name!.substring(0, 1).toUpperCase() +
                                       room.name!.substring(1),
                                   style: const TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black87),
                                 ),
@@ -136,12 +138,12 @@ class _RoomsPageState extends State<RoomsPage> {
                                             .toJson()['text']
                                             .toString(),
                                         style: const TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 13,
                                             color: Colors.black54),
                                       )
                                     : const Text("Last message",
                                         style: TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 13,
                                             color: Colors.black54)),
                               ],
                             ),
@@ -155,7 +157,7 @@ class _RoomsPageState extends State<RoomsPage> {
                                       ? convertTimestampToTime(room.updatedAt!)
                                       : '',
                                   style: const TextStyle(
-                                      fontSize: 14, color: Colors.black54),
+                                      fontSize: 12, color: Colors.black54),
                                 ),
                                 //if unread messages, show number
                               ],
@@ -241,8 +243,8 @@ class _RoomsPageState extends State<RoomsPage> {
       child: Stack(
         children: [
           Container(
-            width: 50,
-            height: 50,
+            width: 45,
+            height: 45,
             decoration: BoxDecoration(
               color: color,
               borderRadius: BorderRadius.circular(25),

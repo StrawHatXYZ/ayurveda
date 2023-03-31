@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+import 'package:ayurveda/screens/auth_errors.dart';
+import 'package:ayurveda/screens/custom_error.dart';
 import '../auth/auth.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:health/models/user_model.dart' as user_model;
+import 'package:ayurveda/models/user_model.dart' as user_model;
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignupPage extends StatefulWidget {
@@ -61,13 +63,27 @@ class _SignupPageState extends State<SignupPage> {
 
         // ignore: use_build_context_synchronously
         Navigator.pushNamed(context, '/home');
+      } on FirebaseAuthException catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            content: CustomSnackBarContent(
+                errorText: (AuthErrors.getErrorText(e.code)))));
       } catch (e) {
         setState(() {
           _isLoading = false;
         });
 
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.toString())));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            content: CustomSnackBarContent(errorText: e.toString())));
       }
     }
   }

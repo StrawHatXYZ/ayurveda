@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
-import 'package:health/models/post_model.dart';
-import 'package:health/util.dart';
+import 'package:ayurveda/models/post_model.dart';
+import 'package:ayurveda/util.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreatePostScreen extends StatefulWidget {
@@ -119,9 +119,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       decoration: InputDecoration(
                         // fillColor: Colors.white,
                         filled: true,
-                        hintText: 'What\'s on your mind?',
+                        hintText: 'What\'s on your mind ?',
                         hintStyle: TextStyle(
-                          color: Colors.grey[400],
+                          color: Colors.grey[600],
                         ),
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 20.0, vertical: 10.0),

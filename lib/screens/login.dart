@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:health/screens/auth_errors.dart';
-import 'package:health/screens/custom_error.dart';
+import 'package:ayurveda/screens/auth_errors.dart';
+import 'package:ayurveda/screens/custom_error.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

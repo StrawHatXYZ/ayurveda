@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:health/constants.dart';
+import 'package:ayurveda/constants.dart';
 
 class Appbar extends StatefulWidget {
   final BuildContext context;

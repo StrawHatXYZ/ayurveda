@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:health/models/post_model.dart';
+import 'package:ayurveda/models/post_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:health/screens/post_view.dart';
-import 'package:health/screens/users.dart';
+import 'package:ayurveda/screens/post_view.dart';
+import 'package:ayurveda/screens/users.dart';
 
 class TimelineView extends StatefulWidget {
   const TimelineView({Key? key}) : super(key: key);
@@ -13,14 +13,16 @@ class TimelineView extends StatefulWidget {
 }
 
 class _TimelineViewState extends State<TimelineView> {
-  final Stream<QuerySnapshot> _postsStream =
-      FirebaseFirestore.instance.collection('posts').snapshots();
+  final Stream<QuerySnapshot> _postsStream = FirebaseFirestore.instance
+      .collection('posts')
+      .orderBy('timestamp', descending: true)
+      .snapshots();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
         //check if _poststeam length is 0
-
+//Sort by timestamp
         body: StreamBuilder<QuerySnapshot>(
             stream: _postsStream,
             builder:
@@ -30,11 +32,19 @@ class _TimelineViewState extends State<TimelineView> {
               }
 
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Text("Loading");
+                return const Center(
+                  child: Text(
+                    "Loading...",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                );
               }
               return ListView(
                 children: snapshot.data!.docs.map((
-                  element,
+                  DocumentSnapshot element,
                 ) {
                   Post post = Post.fromDoc(element);
                   return TimelineTile(
